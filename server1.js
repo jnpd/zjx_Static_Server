@@ -5,26 +5,10 @@ var http = require('http');
 var fs= require('fs');
 var path = require('path');
 var mime = require('mime');
-//makeP('test3/test4/test5')
-function makeP(path){
-    var paths = path.split('/');
 
-    for(var i =1;i<=paths.length;i++){
-        var p = paths.slice(0,i).join('/');
-        var exists = fs.existsSync(p);
-        if(exists){
-            continue;
-        }else{
-            fs.mkdirSync(p);
-            console.log(p+'目录创建成功');
-        }
-    }
-}
 
 function deteleP(path){
     var paths = path.split('/');
-    console.log('detele file')
-    console.log(path)
     for(var i = paths.length; i >= 1; i--){
         var p = paths.slice(0, i).join('/');
         console.log(p);
@@ -33,6 +17,7 @@ function deteleP(path){
                 var fileList = fs.readdirSync(p);
                 fileList.forEach(function(files){
                     var curpath =p+'/'+files;
+                    console.log(curpath)
                     if(fs.statSync(curpath).isDirectory()){
                         deteleP(curpath)
                     }else{
@@ -41,7 +26,7 @@ function deteleP(path){
                 });
                 fs.rmdirSync(path);
             }else{
-                fs.unlinkSync(path)
+                fs.unlinkSync(path);
             }
         }
     }
@@ -70,7 +55,7 @@ http.createServer(function(req,res){
          res.end('忽略不计');
     }else if(pathname=='/del'){
          for(var key in queryObj){
-             console.log(queryObj[key])
+
               deteleP(queryObj[key]);
 
          }
@@ -100,7 +85,7 @@ http.createServer(function(req,res){
                                             htmlStr+='<li><a href="'+file+'"> 点击查看文件 '+file+'</a><a href="/del?path='+file+'" class="del" >删除</a></li>';
                                         }
                                     }else{
-                                       // console.log(pathname)
+
                                         if(fs.statSync(filePath).isDirectory()){
                                             htmlStr+='<li class="folder" ><a href="'+pathname+'/'+file+'">点击查看文件夹 '+file+'</a><a href="/del?path='+file+'" class="del">删除</a></li>';
                                         }else{
@@ -108,12 +93,13 @@ http.createServer(function(req,res){
                                         }
 
                                     }
-                                    //console.log(file);
+
                                 }
 
                             })
                         }
                         htmlStr+="</ul>"
+                        htmlStr+="<scripit src='/js/ajax.js'></script>"
                         res.end(htmlStr);
                     })
 
