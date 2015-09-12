@@ -1,0 +1,5 @@
+body{font-family: "microsoft yahei"}
+ul,li{list-style: none}
+a{text-decoration: none}
+li{height: 42px;line-height: 42px;border-bottom: 1px solid #eee}
+li .del{float:right}
